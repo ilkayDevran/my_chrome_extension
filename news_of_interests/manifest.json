@@ -11,8 +11,7 @@
     },
 
     "background": {
-        "scripts": ["background.js",
-        "randomImage.js"],
+        "scripts": ["Scripts/background.js"],
         "persistent": false
     },
 
@@ -27,12 +26,18 @@
 
     "content_scripts": [
         {
-            "matches":["http://*/*", "https://*/*"],
-            "js":["myScript.js"]
+            "matches":["<all_urls>"],
+            "run_at": "document_end",
+            "js":["Scripts/content.js"]
         }
     ],
     
     "permissions":[
-        "tabs"
+        "tabs",
+        "activeTab",
+        "notifications",
+        "contextMenus",
+        "background",
+        "storage"
     ]
 }
