@@ -1,0 +1,38 @@
+{
+    "manifest_version": 2,
+
+    "name": "Your News",
+    "description": "Randomly, it shows an Einstein photo.",
+    "version": "1.0",
+    
+    "browser_action": {
+        "default_icon": "icon-16.png",
+        "default_popup": "popup.html"
+    },
+
+    "background": {
+        "scripts": ["background.js",
+        "randomImage.js"],
+        "persistent": false
+    },
+
+    "chrome_url_overrides" : {
+        "newtab":"newtab.html"
+    },
+
+    "icons": { 
+        "16": "icon-16.png", 
+        "128": "icon-128.png" 
+    },
+
+    "content_scripts": [
+        {
+            "matches":["http://*/*", "https://*/*"],
+            "js":["myScript.js"]
+        }
+    ],
+    
+    "permissions":[
+        "tabs"
+    ]
+}
