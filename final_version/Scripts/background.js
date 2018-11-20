@@ -26,37 +26,45 @@ function prepareJsonFormatToStore(data){
 }
 
 // main() is here
-chrome.storage.sync.get('lastUpdateTime', function(result) {
-    //window.location.href = " www.hurriyet.com.tr/galeri-bu-halde-konusmayayim-41018096";
-    var lastUpdate = result.lastUpdateTime; // get last update time from local storage
-    console.log('[DEBUG] lastupdate: ', lastUpdate);
+chrome.storage.local.get('checkedList', function(result){
+    var checkedList = result.checkedList;
+    //console.log('[DEBUG] Result from checklist: ', checkedList);
     
-    chrome.storage.local.get('checkedList', function(result){
-        var checkedList = result.checkedList;
-        //console.log('[DEBUG] Result from checklist: ', checkedList);
+    // TODO: Feed user here...
+    chrome.storage.local.get('selectedCategories', function(result){
+        var selectedCategories = result.selectedCategories;
+        console.log('[DEBUG] Result from checklist: ', checkedList);
+        var randomCategory = selectedCategories[Math.floor(Math.random() * selectedCategories.length)];
+        console.log("random category: ", randomCategory);
         
-        chrome.storage.local.get('selectedCategories', function(result){
-            // TODO: Feed user here...
-            console.log('[DEBUG] Result from checklist: ', checkedList);
-            var randomCategory = result.selectedCategories[Math.floor(Math.random() * result.selectedCategories.length)];
-            console.log("random category: ", randomCategory);
-            var showedUrl = checkedList[randomCategory][checkedList[randomCategory+"_index"]];
-            console.log("This url is going to be showed baby!: ", showedUrl);
-            //window.location.href = checkedList[randomCategory][checkedList[randomCategory+"_index"]];
-            //burda kaldınnnn!!!
+        var showedUrl = `http://${checkedList[randomCategory][checkedList[randomCategory+"_index"]]}`;
+        console.log("This url is going to be showed baby!: ", showedUrl);
+        console.log("Category: ",randomCategory," index ", checkedList[randomCategory+"_index"]);
+        
+        window.location.href = showedUrl;
+        
+        if (checkedList[randomCategory+"_index"] == checkedList[randomCategory].length-1){
+            checkedList[randomCategory+"_index"] = 0;
+        }else{
+            checkedList[randomCategory+"_index"] += 1;
+        }
+        chrome.storage.local.set({'checkedList': checkedList});
 
 
+        // Background process: whether the urls are needed to be refreshed or not!
+        chrome.storage.local.get('lastUpdateTime', function(result) {
+            var lastUpdate = result.lastUpdateTime; // get last update time from local storage
+            console.log('[DEBUG] lastupdate: ', lastUpdate);
             // TODO: Check Time
-            //var lastUpdate = result.lastUpdateTime; // get last update time from local storage
             var oneHour = 1000 * 60 * 60;
             var isOneHour = (new Date().getTime() - lastUpdate < oneHour)?false:true; // check time
 
-            if (!isOneHour){
-                var randomIndice=Math.floor(Math.random() * checkedList.length);
-                
+            if (isOneHour){
+                console.log("One Hour has passed... Urls will be refreshed...")
                 chrome.storage.local.get('currentUrl', function(result){
                     var apiUrl = result.currentUrl;
                     console.log("current URL ", apiUrl);
+
                     var request = new XMLHttpRequest(); // Create a request variable and assign a new XMLHttpRequest object to it.
                     request.open('GET', apiUrl + "&rate=20", true);
                     request.onload = function () {

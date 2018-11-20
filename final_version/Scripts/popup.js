@@ -47,18 +47,18 @@ function saveFilter(jsonData, t, url, selectedCategories) {
     chrome.storage.local.set({'lastUpdateTime': t});
     chrome.storage.local.set({'currentUrl': url});
     chrome.storage.local.set({'selectedCategories': selectedCategories});
-    /* 
+    /*
     // Debug for local storage
-    chrome.storage.local.get('mylist', function(result){
-        var lst = result.mylist;
-        console.log("locallll: ",lst);
+    chrome.storage.local.get('lastUpdateTime', function(result){
+        var lst = result.lastUpdateTime;
+        console.log("popup.js lastupdatetime: ",lst);
     });
     */
 }
 
 function getSelectedCategories(){
     selectedCategories = getCheckedCategories(); // selectedCategories is just used for apiUrl editting
-    var apiUrl ="*******";
+    var apiUrl ="*********"; // amazon apigateway url
 
     for (var i=0; i<selectedCategories.length;i++){
         if (i > 0){
