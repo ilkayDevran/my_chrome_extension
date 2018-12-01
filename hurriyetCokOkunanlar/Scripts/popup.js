@@ -58,7 +58,7 @@ function saveFilter(jsonData, t, url, selectedCategories) {
 
 function getSelectedCategories(){
     selectedCategories = getCheckedCategories(); // selectedCategories is just used for apiUrl editting
-    var apiUrl ="*********"; // amazon apigateway url
+    var apiUrl ="https://s7qi56orgh.execute-api.eu-west-1.amazonaws.com/prod/get-url?category="; // amazon apigateway url
 
     for (var i=0; i<selectedCategories.length;i++){
         if (i > 0){
